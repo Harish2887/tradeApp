@@ -2,12 +2,13 @@
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
-//import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import SourceMapSupport from 'source-map-support';
 import bb from 'express-busboy';
 
 // import routes
 import todoRoutes from './routes/todo.server.route';
+import {populateHistoryData} from './controllers/entityHistory.controller';
 
 // define our app using express
 const app = express();
@@ -35,15 +36,16 @@ bb.extend(app);
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+populateHistoryData('LUPIN', 'Lupin', 'Pharma');
 
 // set the port
 const port = process.env.PORT || 3000;
 
 // connect to database
-//mongoose.Promise = global.Promise;
-//mongoose.connect('mongodb://localhost/mern-todo-app', {
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/traderData', {
 ///  useMongoClient: true,
-//});
+});
 
 // add Source Map Support
 SourceMapSupport.install();
